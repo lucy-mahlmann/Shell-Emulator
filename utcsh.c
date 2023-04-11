@@ -67,6 +67,7 @@ int main(int argc, char **argv) {
       long size = size_struct.st_size;
       if(size == 0){
         // error and exits if file has a size of zero
+        printf("13\n");
         display_errors();
         exit(1);
       }
@@ -78,6 +79,7 @@ int main(int argc, char **argv) {
         open_file = fopen(file_name, "r");
         if (open_file == NULL) {
           // errors and exits if file_name is an invalid file
+          printf("12\n");
           display_errors();
           exit(1);
         } 
@@ -93,6 +95,7 @@ int main(int argc, char **argv) {
 
     } else if (argc > 2) {
         // errors and exits if there are too many arguments 
+        printf("11\n");
         display_errors();
         exit(1);
 
@@ -105,6 +108,7 @@ int main(int argc, char **argv) {
     // Lucy was driving
     if(cmdline == NULL || len == 0){
       // errors and exits if cmdline is NULL
+      printf("10\n");
       display_errors();
       exit(0);
     }
@@ -142,9 +146,9 @@ int main(int argc, char **argv) {
         }  
       }
 
-      while(wait(&status) != -1){
-        // parent waits for ALL child processes to complete
-      }
+      // while(wait(&status) != -1){
+      //   // parent waits for ALL child processes to complete
+      // }
     }
   }
   return 0;
@@ -175,10 +179,6 @@ char **make_command_str(char *curr_cmd) {
   // Lucy stopped
   return token_array;
 }
-
-/* NOTE: In the skeleton code, all function bodies below this line are dummy
-implementations made to avoid warnings. You should delete them and replace them
-with your own implementation. */
 
 /** Turn a command line into tokens with strtok
  *
@@ -258,6 +258,7 @@ struct Command parse_command(char **tokens) {
         // the redirect
         display_errors();
         command_exec.outputFile = "ERROR";
+        printf("8\n");
         break;
       }
 
@@ -267,6 +268,7 @@ struct Command parse_command(char **tokens) {
         if (command_exec.args[i + 1] == NULL) {
           // errors if there is no file listed after redirect
           display_errors();
+          printf("7\n");
           command_exec.outputFile = "ERROR";
           break;
         } 
@@ -276,6 +278,7 @@ struct Command parse_command(char **tokens) {
           && strncmp(command_exec.args[i + 2], "/", 1) == 0) {
           // errors when the arg after the output file is also a file 
           command_exec.outputFile = "ERROR";
+          printf("6\n");
           display_errors();
           break;
         }
@@ -290,6 +293,7 @@ struct Command parse_command(char **tokens) {
       } else {
         // errors if there was already a redirect 
         command_exec.outputFile = "ERROR";
+        printf("5\n");
         display_errors();
         break;
       }
@@ -317,10 +321,22 @@ void display_errors(){
  */
 void eval(struct Command *cmd) {
   // Lucy was driving
+  pid_t pid;
   int is_built_in = try_exec_builtin(cmd);
   if (!is_built_in) {
     // is an external command
-    exec_external_cmd(cmd);
+    pid = fork();
+    if (pid == 0) {
+      exec_external_cmd(cmd);
+    }
+    // parent waits for child to finish
+    int status;
+    if (waitpid(pid, &status, 0) < 0) {
+      printf("1\n");
+      display_errors();
+      exit(0);
+    }
+    
   }
   return;
   // Lucy stopped
@@ -356,6 +372,7 @@ int try_exec_builtin(struct Command *cmd) {
       int result = set_shell_path(&(cmd->args[1]));
       if(result == 0) {
         // errors if setting shell path fails
+        printf("2\n");
         display_errors();
       } 
     }
@@ -407,18 +424,18 @@ char *get_abs_path(struct Command *cmd) {
  */
 void exec_external_cmd(struct Command *cmd) {
   // Reyva was driving
-  int status;
-  pid_t child = fork();
-  if (child == -1) {
-    // errors if fork fails
-    display_errors();
-    return;
-  } else if (child == 0) {
+  // int status;
+  // pid_t child = fork();
+  // if (child == -1) {
+  //   // errors if fork fails
+  //   display_errors();
+  //   return;
+  // } else if (child == 0) {
     // this is the child process
 
     char *abs_path;
     // check if the the cmd name is an absolute path
-    if(is_absolute_path(cmd->args[0]) != 1) {
+    if(!is_absolute_path(cmd->args[0])) {
       // need to find an absolute path
       abs_path = get_abs_path(cmd);
     } else {  
@@ -433,15 +450,17 @@ void exec_external_cmd(struct Command *cmd) {
       dup2(fd, STDOUT_FILENO);
       dup2(fd, STDERR_FILENO);
     }
-
+    
     if (execv(abs_path, cmd->args) == -1) {
       // display error if execv fails
+      printf("3\n");
+      //printf("%s\n", abs_path);
       display_errors();
       exit(0);
     }
 
-    return;
-  } 
+   // return;
+  //} 
   return;
   // Reyva stopped 
 }

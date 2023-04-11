@@ -1,4 +1,4 @@
-ls tests/test-utils/p2a-test > /tmp/reyvac/utcsh/output19
-cat /tmp/reyvac/utcsh/output19
-rm -f /tmp/reyvac/utcsh/output19
+ls tests/test-utils/p2a-test > /tmp/lucym/utcsh/output19
+cat /tmp/lucym/utcsh/output19
+rm -f /tmp/lucym/utcsh/output19
 exit

@@ -1,2 +1,2 @@
-ls > /tmp/reyvac/utcsh/file1 > /tmp/reyvac/utcsh/file2
+ls > /tmp/lucym/utcsh/file1 > /tmp/lucym/utcsh/file2
 exit
