@@ -59,11 +59,16 @@ Or an external command may be executed by fork-and-exec and redirection if reque
 <!-- EXECUTION -->
 ## Execution
 
-TODO: talk about overall design, RELP
-TODO: talk about testing that was done
+The basis of the shell is the read-evaluate-print loop in main() in utcsh.c:
+1. Reads input from the user or from a script that is provided
+2. Evaluates the input, and executes the appropriate action based on the users request
+3. Prints any output that is associated with the requested action to either the terminal or redirected to a file
 
+Overall Execution of Shell Emulator in utcsh.c
 
-
+<img
+  src="shell-block-diagram.jpg"
+  style="display: inline-block; margin: 0 auto; width: 712px; height: 600px">
 
 
 
