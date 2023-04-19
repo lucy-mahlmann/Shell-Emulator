@@ -8,9 +8,10 @@
     <li>
       <a href="#about-the-project">About The Project</a>
     </li>
-    <li><a href="#usage">Usage</a></li>
+    <li><a href="#structure">Structure</a></li>
+    <li><a href="#execution">Execution</a></li>
+    <li><a href="#learning-challenges">Learning Challenges</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
@@ -21,22 +22,65 @@
 
 A simple Unix shell that reads input from user, evaulates the input and prints out the requested output.
 
-* Waits for input from user, processes this input, and takes appropriate actions
-* Can run built-in and external commands using fork-exec method
-* Can read from a script and execute commands in that file
-* Can redirect output to files
-* Can run concurrent commands with '&' 
+* Waits for input from user through text based interface, processes this input, and takes appropriate actions
+* Can run built-in and external commands using fork-exec system calls
+* Implemented reading from a script and executing commands in that file
+* Capable of redirecting output to files
+* Able to run concurrent commands with '&' 
 
 
 
-<!-- USAGE EXAMPLES -->
-## Usage
+<!-- STRUCTURE -->
+## Structure
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+The Shell code is either interacted with through the terminal as a text interface or by reading in commands in a script.
+Each command given is represented as a struct Command that is then used to take action to execute command in the correct manner that is created in parse_command().
 
-_For more examples, please refer to the [Documentation](https://www.cs.utexas.edu/~ans/classes/cs439/projects/shell_project/shell.html)_
+```
+ struct Command {
+  char *name;       /* command name */
+  char **args;      /* Argument array for the command, 
+                    includes all input that was recieved from the command line
+                    args[0] is the command name of the first command call 
+                    */
+  char *outputFile; /* Redirect target for file (NULL means no redirect, 
+                    "ERROR" means invalid redirection) 
+                    */
+  int num_args;     /* the number of arguments in the command. */
+};
+ ```
+
+Based on the command given, the following built-in commands may be executed:
+* cd
+* path
+* exit
+Or an external command may be executed by fork-and-exec and redirection if requested.
+
+<!-- EXECUTION -->
+## Execution
+
+TODO: talk about overall design, RELP
+TODO: talk about testing that was done
 
 
+
+
+
+
+<!-- LEARNING CHALLENGES -->
+## Learning Challenges
+
+The major problems that were encountered while programming/designing include:
+
+* detecting if a path is an absolute path or a relative path
+* checking for errors within a given command line
+* running concurrent commands 
+
+How these problems were solved:
+
+* keeping track of all the shell paths in an array that have been previously used and checking with this array whether the current path is contained in this array
+* having multiple error checks when an invalid command line is given to account for many different cases and variations of incorrect format of the command line
+* using fork and wait inorder that multiple process can be running but they must all wait for all other processes to complete before moving on
 
 <!-- CONTACT -->
 ## Contact
@@ -46,16 +90,6 @@ Lucy Mahlmann - lmahlmann@utexas.edu
 Reyva Chawla - reyvachawla@utexas.edu
 
 Project Link: [https://github.com/lucy-mahlmann/Project0-Shell](https://github.com/lucy-mahlmann/Project0-Shell)
-
-
-
-
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
-
-Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
-
-* 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
