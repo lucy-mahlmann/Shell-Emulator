@@ -93,7 +93,7 @@ Lucy Mahlmann - lmahlmann@utexas.edu
 
 Reyva Chawla - reyvachawla@utexas.edu
 
-Project Link: [https://github.com/lucy-mahlmann/Project0-Shell](https://github.com/lucy-mahlmann/Project0-Shell)
+Project Link: [https://github.com/lucy-mahlmann/Shell-Emulator](https://github.com/lucy-mahlmann/Shell-Emulator)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
